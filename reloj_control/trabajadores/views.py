@@ -519,7 +519,9 @@ class DiasTrabajadosAlMes(APIView):
             for trabajador_id, years in dias_trabajados.items():
                 for year, months in years.items():
                     for month_name, days in months.items():
-                        dias_trabajados[trabajador_id][year][month_name] = len(days)
+                        dias_trabajados_en_mes = len(days)
+                        dias_no_trabajados = calendar.monthrange(year, list(calendar.month_name).index(month_name))[1] - dias_trabajados_en_mes
+                        dias_trabajados[trabajador_id][year][month_name] = f"{dias_trabajados_en_mes} días trabajados, {dias_no_trabajados} días no trabajados"
 
             return Response(dias_trabajados, status=status.HTTP_200_OK)
         except Exception as e:
@@ -555,3 +557,44 @@ class DiasNoTrabajadosConsecutivos(APIView):
         dias_no_trabajados_final = {trabajador_id: dias for trabajador_id, dias in dias_no_trabajados_final.items() if dias}
 
         return Response(dias_no_trabajados_final)
+    
+
+class DiaConMasHoras(APIView): # Se le puede agregar tambien el mes
+    def get(self, request):
+        trabajadores = RegistroTiempo.objects.all()
+        # Crear un diccionario para almacenar los días y las horas trabajadas por cada trabajador
+        horas_trabajadas = {trabajador.trabajador_id: [] for trabajador in trabajadores}
+        horas_maximas_trabajadas = {trabajador.trabajador_id: [] for trabajador in trabajadores}
+
+        for trabajador in trabajadores:
+            horas_trabajadas[trabajador.trabajador_id].append((trabajador.tiempo_trabajado, trabajador.fecha))
+
+        for i in horas_trabajadas:
+            horas_maximas_trabajadas[i] = max(horas_trabajadas[i])
+        return Response(horas_maximas_trabajadas)
+    
+class AusenciasJustificadas(APIView):
+    def get(self, request):
+        # Se seleccion una valor random de 1 a 3, si es 1 se le asigna una ausencia justificada
+        trabajadores = RegistroTiempo.objects.all()
+        ausencias_justificadas = {trabajador.trabajador_id: [] for trabajador in trabajadores}
+        for trabajador in trabajadores:
+            if random.randint(1, 3) == 1:
+                if trabajador.tiempo_salida == time(0, 0):
+                    ausencias_justificadas[trabajador.trabajador_id].append(f"{trabajador.fecha.strftime('%Y-%m-%d')}: Ausencia justificada")
+
+        # Eliminar los trabajadores que no tienen ausencias justificadas
+        ausencias_justificadas = {trabajador_id: dias for trabajador_id, dias in ausencias_justificadas.items() if dias}
+        return Response(ausencias_justificadas)
+
+class IdentifTurnosFDS(APIView):
+    def get(self, request):
+        trabajadores = RegistroTiempo.objects.all()
+        turnos_fds = {trabajador.trabajador_id: [] for trabajador in trabajadores}
+        for trabajador in trabajadores:
+            if trabajador.fecha.weekday() >= 5:
+                if trabajador.tiempo_salida != time(0, 0):
+                    turnos_fds[trabajador.trabajador_id].append(f"Trabajó el fin de semana: {trabajador.fecha.strftime('%Y-%m-%d')}")
+
+        turnos_fds = {trabajador_id: dias for trabajador_id, dias in turnos_fds.items() if dias}
+        return Response(turnos_fds)

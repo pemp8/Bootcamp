@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import RunSimuladorView, RunMasDiasView, TrabajadoresConHorasCero, TopTrabajadores, PuntualidadTrabajadores
 from .views import HorasTrabajadas, HorasNoTrabajadas, DiaMenosHorasTrabajadas, PromedioHorasTrabajadas, HorasDeAlmuerzo
-from .views import DiasTrabajadosAlMes, DiasNoTrabajadosConsecutivos, CalcularSueldo, HorasExtras
+from .views import DiasTrabajadosAlMes, DiasNoTrabajadosConsecutivos, CalcularSueldo, HorasExtras, DiaConMasHoras, AusenciasJustificadas, IdentifTurnosFDS
 
 
 urlpatterns = [
@@ -19,5 +19,8 @@ urlpatterns = [
     path('horasDeAlmuerzo/', HorasDeAlmuerzo.as_view(), name='horasDeAlmuerzo'),
     path('diasTrabajadosAlMes/', DiasTrabajadosAlMes.as_view(), name='diasTrabajadosAlMes'),
     path('diasNoTrabajadosConsecutivos/', DiasNoTrabajadosConsecutivos.as_view(), name='diasNoTrabajadosConsecutivos'),
+    path('diaConMasHoras/',DiaConMasHoras.as_view(),name='diaConMasHoras'),
+    path('ausenciasJustificadas/',AusenciasJustificadas.as_view(),name='ausenciasJustificadas'),
+    path('identifTurnosFDS/', IdentifTurnosFDS.as_view(),name='identifTurnosFDS'),
 
 ]
