@@ -591,8 +591,9 @@ class IdentifTurnosFDS(APIView):
     def get(self, request):
         trabajadores = RegistroTiempo.objects.all()
         turnos_fds = {trabajador.trabajador_id: [] for trabajador in trabajadores}
+
         for trabajador in trabajadores:
-            if trabajador.fecha.weekday() >= 5:
+            if trabajador.fecha.isoweekday() >= 6:
                 if trabajador.tiempo_salida != time(0, 0):
                     turnos_fds[trabajador.trabajador_id].append(f"Trabajó el fin de semana: {trabajador.fecha.strftime('%Y-%m-%d')}")
 
