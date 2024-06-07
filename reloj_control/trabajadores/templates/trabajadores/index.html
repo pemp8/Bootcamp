@@ -2,122 +2,180 @@
 <html>
 <head>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c2f33;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            position: fixed; /* Hacer que el contenedor del formulario esté fijo */
+            top: 0; /* Alinearlo al tope de la página */
+            left: 0; /* Alinearlo al borde izquierdo */
+            padding: 20px;
+            background-color: #23272a;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container form {
+            display: inline-block;
+        }
+
+        .form-container form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .form-container form input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #3a3d42;
+            color: #ffffff;
+        }
+
+        .form-container form input[type="date"] {
+            padding: 8px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-left: 250px; /* Añadir margen izquierdo para evitar solapamiento con el formulario fijo */
+        }
+
         .column {
-    float: left;
-    width: 30%; /* Adjust this value as needed */
-    padding: 5px;
-    text-align: center;
-    border: 1px solid black;
-    margin: 5px;
-    box-sizing: border-box; /* Add this line */
-}
+            background-color: #23272a;
+            width: 30%;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
 
-.column ul li {
-    margin-bottom: 10px;
-    border: 1px solid black;
-    padding: 5px;
-}
+        .column ul {
+            list-style-type: none;
+            padding: 0;
+        }
 
-.row::after {
-    content: "";
-    clear: both;
-    display: table;
-}
+        .column ul li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #2c2f33;
+            border-radius: 4px;
+            border: 1px solid #444;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .column ul li a {
+            text-decoration: none;
+            color: #7289da;
+            display: block;
+        }
+
+        .column ul li:hover {
+            background-color: #3a3d42;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .alert {
+            color: #ff6f61;
+            font-size: 1.2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
+    <script>
+        function setUniqueFormAction(action, formId, requiredFields) {
+            var form = document.getElementById(formId);
+            var trabajador_id = form.elements['trabajador_id'].value;
+            var fecha = form.elements['fecha'].value;
+            var fecha_inicio = form.elements['fecha_inicio'].value;
+            var fecha_fin = form.elements['fecha_fin'].value;
+            var url = action + "?";
+            var allFilled = true;
+
+            requiredFields.forEach(function(field) {
+                if (!form.elements[field].value) {
+                    allFilled = false;
+                    alert("Please fill in the required field: " + field.replace("_", " "));
+                }
+            });
+
+            if (!allFilled) return false;
+
+            if (trabajador_id) {
+                url += "trabajador_id=" + trabajador_id + "&";
+            }
+            if (fecha) {
+                url += "fecha=" + fecha + "&";
+            }
+            if (fecha_inicio) {
+                url += "fecha_inicio=" + fecha_inicio + "&";
+            }
+            if (fecha_fin) {
+                url += "fecha_fin=" + fecha_fin;
+            }
+            window.location.href = url;
+        }
+    </script>
 </head>
 <body>
     <h1>Servicios Reloj Control</h1>
+    <div class="form-container">
+        <form id="myForm" action="/api/promedioHorasTrabajadas/" method="get">
+            <label for="trabajador_id">Trabajador ID:</label><br>
+            <input type="text" id="trabajador_id" name="trabajador_id"><br>
+            <label for="fecha">Fecha:</label><br>
+            <input type="date" id="fecha" name="fecha"><br>
+            <label for="fecha_inicio">Fecha Inicio:</label><br>
+            <input type="date" id="fecha_inicio" name="fecha_inicio"><br>
+            <label for="fecha_fin">Fecha Fin:</label><br>
+            <input type="date" id="fecha_fin" name="fecha_fin"><br>
+        </form>
+    </div>
     <div class="row">
         <div class="column">
             <ul>
-                <script>
-                    function setFormAction(action) {
-                        var trabajador_id = document.getElementById('trabajador_id').value;
-                        var fecha = document.getElementById('fecha').value;
-                        var url = action + "?trabajador_id=" + trabajador_id + "&fecha=" + fecha;
-                        window.location.href = url;
-                    }
-                </script>
-                
-                <form id="myForm" action="/api/horasTrabajadas/" method="get">
-                    <label for="trabajador_id">Trabajador ID:</label><br>
-                    <input type="text" id="trabajador_id" name="trabajador_id"><br>
-                    <label for="fecha">Fecha:</label><br>
-                    <input type="date" id="fecha" name="fecha"><br>
-                </form>
-                <ul>
-                    <li><a href="#" onclick="setFormAction('/api/horasTrabajadas/')">Horas Trabajadas</a></li>
-                    <li><a href="#" onclick="setFormAction('/api/horasNoTrabajadas/')">Horas No Trabajadas</a></li>
-                    <li><a href="#" onclick="setFormAction('/api/calcularSueldo/')">Calcular Sueldo</a></li>
-                </ul>
+                <p class="alert">Trabajador ID y Fecha</p>
+                <li><a href="#" onclick="setUniqueFormAction('/api/horasTrabajadas/', 'myForm', ['trabajador_id', 'fecha'])">Horas Trabajadas</a></li>
+                <li><a href="#" onclick="setUniqueFormAction('/api/horasNoTrabajadas/', 'myForm', ['trabajador_id', 'fecha'])">Horas No Trabajadas</a></li>
+                <li><a href="#" onclick="setUniqueFormAction('/api/calcularSueldo/', 'myForm', ['trabajador_id', 'fecha'])">Calcular Sueldo</a></li>
             </ul>
         </div>
-        
-        
         <div class="column">
             <ul>
-                <script>
-                    function setFormAction(action, formId) {
-                        var form = document.getElementById(formId);
-                        var trabajador_id = form.elements['trabajador_id'].value;
-                        var fecha_inicio = form.elements['fecha_inicio'].value;
-                        var fecha_fin = form.elements['fecha_fin'].value;
-                        var url = action + "?trabajador_id=" + trabajador_id + "&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin;
-                        window.location.href = url;
-                    }
-                </script>
-                <form id="myForm2" action="/api/horasTrabajadas/" method="get">
-                    <label for="trabajador_id2">Trabajador ID:</label><br>
-                    <input type="text" id="trabajador_id2" name="trabajador_id"><br>
-                    <label for="fecha_inicio">Fecha Inicio:</label><br>
-                    <input type="date" id="fecha_inicio" name="fecha_inicio"><br>
-                    <label for="fecha_fin">Fecha Fin:</label><br>
-                    <input type="date" id="fecha_fin" name="fecha_fin"><br>
-                </form>
-                <ul>
-                    <li><a href="#" onclick="setFormAction('promedioHorasTrabajadas/', 'myForm2')">Promedio Horas Trabajadas</a></li>
-                    <li><a href="#" onclick="setFormAction('horasExtras/', 'myForm2')">Horas Extra</a></li>
-                <ul>
+                <p class="alert">Trabajador ID, Fecha Inicio y Fecha Fin</p>
+                <li><a href="#" onclick="setUniqueFormAction('/api/promedioHorasTrabajadas/', 'myForm', ['trabajador_id', 'fecha_inicio', 'fecha_fin'])">Promedio Horas Trabajadas</a></li>
+                <li><a href="#" onclick="setUniqueFormAction('/api/horasExtras/', 'myForm', ['trabajador_id', 'fecha_inicio', 'fecha_fin'])">Horas Extra</a></li>
             </ul>
         </div>
-        
         <div class="column">
-            <script>
-                function setFormAction(action, formId) {
-                    var form = document.getElementById(formId);
-                    var fecha_inicio = form.elements['fecha_inicio'].value;
-                    var fecha_fin = form.elements['fecha_fin'].value;
-                    var url = action + "?fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin;
-                    window.location.href = url;
-                }
-            </script>
-            
-            <form id="myForm3" action="/api/horasTrabajadas/" method="get">
-                <label for="fecha_inicio3">Fecha Inicio:</label><br>
-                <input type="date" id="fecha_inicio3" name="fecha_inicio"><br>
-                <label for="fecha_fin3">Fecha Fin:</label><br>
-                <input type="date" id="fecha_fin3" name="fecha_fin"><br>
-            </form>
             <ul>
-                <li><a href="#" onclick="setFormAction('topTrabajadores/', 'myForm3')">Top Trabajadores</a></li>
-            <ul>
+                <p class="alert">Fecha Inicio y Fecha Fin</p>
+                <li><a href="#" onclick="setUniqueFormAction('/api/topTrabajadores/', 'myForm', ['fecha_inicio', 'fecha_fin'])">Top Trabajadores</a></li>
+            </ul>
         </div>
         <div class="column">
-            <script>
-                function setFormAction(action, formId) {
-                    var form = document.getElementById(formId);
-                    var trabajador_id = form.elements['trabajador_id'].value;
-                    var url = action + "?trabajador_id=" + trabajador_id;
-                    window.location.href = url;
-                }
-            </script>
-            <form id="myForm4" action="/api/horasTrabajadas/" method="get">
-                <label for="trabajador_id4">Trabajador ID:</label><br>
-                <input type="text" id="trabajador_id4" name="trabajador_id"><br>
-            </form>
             <ul>
-                <li><a href="#" onclick="setFormAction('diaMenosHorasTrabajadas/', 'myForm4')">Dia Menos Horas Trabajadas</a></li>
-            <ul>
+                <p class="alert">Trabajador ID</p>
+                <li><a href="#" onclick="setUniqueFormAction('/api/diaMenosHorasTrabajadas/', 'myForm', ['trabajador_id'])">Dia Menos Horas Trabajadas</a></li>
+            </ul>
         </div>
         <div class="column">
             <ul>
