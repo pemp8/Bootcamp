@@ -5,6 +5,7 @@ from .views import DiasTrabajadosAlMes, DiasNoTrabajadosConsecutivos, CalcularSu
 
 
 urlpatterns = [
+    path('',views.index, name='index'),
     path('runsimulador/', RunSimuladorView.as_view(), name='runSimulador'),
     path('runMasDias/', RunMasDiasView.as_view(), name='runMasDias'),
     path('trabajadoresCeroHoras/',TrabajadoresConHorasCero.as_view(), name='trabajadoresCeroHoras'),

@@ -12,6 +12,11 @@ from datetime import timedelta
 from django.db.models import Sum, F, Avg, Min
 from django.utils import timezone
 import calendar
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'trabajadores/index.html')
+
 
 class RunSimuladorView(APIView):
     def get(self, request, *args, **kwargs):
