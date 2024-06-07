@@ -2,7 +2,7 @@ from django.urls import path
 from .views import RunSimuladorView, RunMasDiasView, TrabajadoresConHorasCero, TopTrabajadores, PuntualidadTrabajadores
 from .views import HorasTrabajadas, HorasNoTrabajadas, DiaMenosHorasTrabajadas, PromedioHorasTrabajadas, HorasDeAlmuerzo
 from .views import DiasTrabajadosAlMes, DiasNoTrabajadosConsecutivos, CalcularSueldo, HorasExtras, DiaConMasHoras, AusenciasJustificadas, IdentifTurnosFDS
-
+from . import views
 
 urlpatterns = [
     path('',views.index, name='index'),

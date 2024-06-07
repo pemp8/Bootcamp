@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .column {
+    float: left;
+    width: 30%; /* Adjust this value as needed */
+    padding: 5px;
+    text-align: center;
+    border: 1px solid black;
+    margin: 5px;
+    box-sizing: border-box; /* Add this line */
+}
+
+.column ul li {
+    margin-bottom: 10px;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+    </style>
+</head>
+<body>
+    <h1>Servicios Reloj Control</h1>
+    <div class="row">
+        <div class="column">
+            <ul>
+                <script>
+                    function setFormAction(action) {
+                        var trabajador_id = document.getElementById('trabajador_id').value;
+                        var fecha = document.getElementById('fecha').value;
+                        var url = action + "?trabajador_id=" + trabajador_id + "&fecha=" + fecha;
+                        window.location.href = url;
+                    }
+                </script>
+                
+                <form id="myForm" action="/api/horasTrabajadas/" method="get">
+                    <label for="trabajador_id">Trabajador ID:</label><br>
+                    <input type="text" id="trabajador_id" name="trabajador_id"><br>
+                    <label for="fecha">Fecha:</label><br>
+                    <input type="date" id="fecha" name="fecha"><br>
+                </form>
+                <ul>
+                    <li><a href="#" onclick="setFormAction('/api/horasTrabajadas/')">Horas Trabajadas</a></li>
+                    <li><a href="#" onclick="setFormAction('/api/horasNoTrabajadas/')">Horas No Trabajadas</a></li>
+                    <li><a href="#" onclick="setFormAction('/api/calcularSueldo/')">Calcular Sueldo</a></li>
+                </ul>
+            </ul>
+        </div>
+        
+        
+        <div class="column">
+            <ul>
+                <script>
+                    function setFormAction(action, formId) {
+                        var form = document.getElementById(formId);
+                        var trabajador_id = form.elements['trabajador_id'].value;
+                        var fecha_inicio = form.elements['fecha_inicio'].value;
+                        var fecha_fin = form.elements['fecha_fin'].value;
+                        var url = action + "?trabajador_id=" + trabajador_id + "&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin;
+                        window.location.href = url;
+                    }
+                </script>
+                <form id="myForm2" action="/api/horasTrabajadas/" method="get">
+                    <label for="trabajador_id2">Trabajador ID:</label><br>
+                    <input type="text" id="trabajador_id2" name="trabajador_id"><br>
+                    <label for="fecha_inicio">Fecha Inicio:</label><br>
+                    <input type="date" id="fecha_inicio" name="fecha_inicio"><br>
+                    <label for="fecha_fin">Fecha Fin:</label><br>
+                    <input type="date" id="fecha_fin" name="fecha_fin"><br>
+                </form>
+                <ul>
+                    <li><a href="#" onclick="setFormAction('promedioHorasTrabajadas/', 'myForm2')">Promedio Horas Trabajadas</a></li>
+                    <li><a href="#" onclick="setFormAction('horasExtras/', 'myForm2')">Horas Extra</a></li>
+                <ul>
+            </ul>
+        </div>
+        
+        <div class="column">
+            <script>
+                function setFormAction(action, formId) {
+                    var form = document.getElementById(formId);
+                    var fecha_inicio = form.elements['fecha_inicio'].value;
+                    var fecha_fin = form.elements['fecha_fin'].value;
+                    var url = action + "?fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin;
+                    window.location.href = url;
+                }
+            </script>
+            
+            <form id="myForm3" action="/api/horasTrabajadas/" method="get">
+                <label for="fecha_inicio3">Fecha Inicio:</label><br>
+                <input type="date" id="fecha_inicio3" name="fecha_inicio"><br>
+                <label for="fecha_fin3">Fecha Fin:</label><br>
+                <input type="date" id="fecha_fin3" name="fecha_fin"><br>
+            </form>
+            <ul>
+                <li><a href="#" onclick="setFormAction('topTrabajadores/', 'myForm3')">Top Trabajadores</a></li>
+            <ul>
+        </div>
+        <div class="column">
+            <script>
+                function setFormAction(action, formId) {
+                    var form = document.getElementById(formId);
+                    var trabajador_id = form.elements['trabajador_id'].value;
+                    var url = action + "?trabajador_id=" + trabajador_id;
+                    window.location.href = url;
+                }
+            </script>
+            <form id="myForm4" action="/api/horasTrabajadas/" method="get">
+                <label for="trabajador_id4">Trabajador ID:</label><br>
+                <input type="text" id="trabajador_id4" name="trabajador_id"><br>
+            </form>
+            <ul>
+                <li><a href="#" onclick="setFormAction('diaMenosHorasTrabajadas/', 'myForm4')">Dia Menos Horas Trabajadas</a></li>
+            <ul>
+        </div>
+        <div class="column">
+            <ul>
+                <li><a href="diaConMasHoras/">Dia Con Mas Horas</a></li>
+                <li><a href="ausenciasJustificadas/">Ausencias Justificadas</a></li>
+                <li><a href="identifTurnosFDS/">Identif Turnos FDS</a></li>
+                <li><a href="horasDeAlmuerzo/">Horas De Almuerzo</a></li>
+                <li><a href="diasNoTrabajadosConsecutivos/">Dias No Trabajados Consecutivos</a></li>
+                <li><a href="diasTrabajadosAlMes/">Dias Trabajados Al Mes</a></li>
+                <li><a href="trabajadoresCeroHoras/">Trabajadores Cero Horas</a></li>
+                <li><a href="puntualidadTrabajadores/">Puntualidad De Trabajadores</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

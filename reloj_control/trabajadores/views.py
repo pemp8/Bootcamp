@@ -124,8 +124,8 @@ class TrabajadoresConHorasCero(APIView):
     
 class TopTrabajadores(APIView):
     def get(self, request):
-        fecha_inicio = request.query_params.get('fechaInicio')
-        fecha_fin = request.query_params.get('fechaFinal')
+        fecha_inicio = request.query_params.get('fecha_inicio')
+        fecha_fin = request.query_params.get('fecha_fin')
 
         # Validar que ambos parámetros estén presentes
         if not fecha_inicio or not fecha_fin:
@@ -333,7 +333,7 @@ class CalcularSueldo(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class PromedioHorasTrabajadas(APIView):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         try:
             # Se obtiene el ID del trabajador y el rango de fechas
             trabajador_id = request.query_params.get('trabajador_id')
